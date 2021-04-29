@@ -29,6 +29,7 @@ const anotherUpdatedList = immutableList.update(3, (n) => n * n);
 console.log(anotherUpdatedList);
 
 //  self study:
+//  https://immutable-js.github.io/immutable-js/docs/#/
 //  delete() = remove()
 //  clear()
 //  insert()

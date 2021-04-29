@@ -1,0 +1,16 @@
+{
+  "name": "immutable-and-immer",
+  "version": "1.0.0",
+  "description": "",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC",
+  "dependencies": {
+    "immer": "^9.0.2",
+    "immutable": "^4.0.0-rc.12"
+  }
+}

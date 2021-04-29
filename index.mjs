@@ -27,6 +27,7 @@ function Store(nascentState, originalReducer) {
   };
 }
 
+//  reducer
 const reducer = (originalState, action) => {
   //  apply the modifications to the newState
   switch (action.type) {
@@ -45,6 +46,27 @@ const reducer = (originalState, action) => {
   }
 };
 
+//  action creators
+const updateName = (newFirstName) => {
+  // return action object
+  return {
+    type: 'UPDATE_NAME',
+    payload: {
+      newFirstName,
+    },
+  };
+};
+
+const updateCity = (newCity) => {
+  // return action object
+  return {
+    type: 'UPDATE_CITY',
+    payload: {
+      newCity: newCity,
+    },
+  };
+};
+
 //  using the store
 const storeInstance = new Store(
   { firstName: 'Vivek', city: 'Haveri' },
@@ -60,20 +82,9 @@ storeInstance.subscribe(() => {
   console.log('Subscriber 2: State changed', storeInstance.getState());
 });
 
+//  dispatch the actions with action creators
 console.log('Dispatching the UPDATE_NAME action');
-
-//  dispatch the actions
-storeInstance.dispatch({
-  type: 'UPDATE_NAME',
-  payload: {
-    newFirstName: 'Rajendra',
-  },
-});
+storeInstance.dispatch(updateName('Ranjan'));
 
 console.log('Dispatching the UPDATE_CITY action');
-storeInstance.dispatch({
-  type: 'UPDATE_CITY',
-  payload: {
-    newCity: 'Mumbai',
-  },
-});
+storeInstance.dispatch(updateCity('Hyderabad'));

@@ -16,7 +16,7 @@ const originalState = {
 };
 
 const nextState = produce(originalState, (d) => {
-  d.user.extraInfo.roles.shift(); //  delete manager
+  d.user.extraInfo.roles.shift(); //  delete user
   d.user.extraInfo.office.location = 'Chennai';
 });
 

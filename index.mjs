@@ -1,39 +1,48 @@
-import { List, Set } from 'immutable';
+import { fromJS, Map } from 'immutable';
 
-//  creating an immutable list
-const immutableList = List([0, 1, 2, 3, 4]);
+//  converting a regular JS object to Map, using fromJS
 
-//  only the immutable list is confirmed
-console.log(List.isList(immutableList), List.isList([0, 1, 2, 3, 4]));
+const car = {
+  make: 'BMW',
+  model: 'X5',
+  year: 2021,
+  owner: {
+    firstName: 'Kailash',
+    lastName: 'Kumar',
+    address: {
+      city: 'Delhi',
+      state: 'Delhi',
+    },
+  },
+};
 
-//  index-based access is not supported
-console.log(immutableList[3]);
+const immutableMap = fromJS(car);
 
-//  using the get() to read
-console.log(immutableList.get(3));
+console.log(Map.isMap(immutableMap));
 
-//  to set value, use set(), which produces the new List
-const newImmutableList = immutableList.set(3, 15);
+//  using set(k, v) to set the entries
 
-// use .toJS() for convenient string representation
-console.log(newImmutableList);
+const newMap = immutableMap.set('make', 'Kia');
 
-//  these are different objects
-console.log(newImmutableList === immutableList);
+//  a convenient string representation
+console.log(newMap.toJS());
+
+//  different objects
+console.log(newMap === immutableMap);
 
 //  dynamic set
-//  immutableList has still value 3 at index 3
-const anotherUpdatedList = immutableList.update(3, (n) => n * n);
+const anotherMap = immutableMap.update('year', (v) => v - 2);
 
-// use .toJS() for convenient string representation
-console.log(anotherUpdatedList);
+console.log(anotherMap.toJS());
+
+//  deep dynamic set
+const yetAnotherMap = immutableMap.update('owner', (o) =>
+  o.update('address', (a) => a.update('city', (c) => 'Bengaluru'))
+);
+
+console.log(yetAnotherMap.toJS());
 
 //  self study:
-//  https://immutable-js.github.io/immutable-js/docs/#/
-//  delete() = remove()
-//  clear()
-//  insert()
-//  push()
-//  pop()
-//  shift()
-//  unshift()
+//  https://immutable-js.github.io/immutable-js/docs/#/Map
+//  delete, remove, deleteAll, removeAll
+//  clear

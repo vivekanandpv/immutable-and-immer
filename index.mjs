@@ -1,48 +1,21 @@
-import { fromJS, Map } from 'immutable';
+import { produce } from 'immer';
 
-//  converting a regular JS object to Map, using fromJS
-
-const car = {
-  make: 'BMW',
-  model: 'X5',
-  year: 2021,
-  owner: {
-    firstName: 'Kailash',
-    lastName: 'Kumar',
-    address: {
-      city: 'Delhi',
-      state: 'Delhi',
-    },
-  },
+const originalState = {
+  isLoggedIn: true,
+  imageUrl: 'http://localhost:3000/image.png',
+  displayName: 'Nagesh',
 };
 
-const immutableMap = fromJS(car);
+const nextState = produce(originalState, (d) => {
+  //  apply the change as mutation
+  //  but immer will cause immutable update
+  //  originalState is unchanged
+  d.displayName = 'Ravindra';
+});
 
-console.log(Map.isMap(immutableMap));
+//  original state is unchanged
+console.log(originalState);
 
-//  using set(k, v) to set the entries
+console.log(nextState);
 
-const newMap = immutableMap.set('make', 'Kia');
-
-//  a convenient string representation
-console.log(newMap.toJS());
-
-//  different objects
-console.log(newMap === immutableMap);
-
-//  dynamic set
-const anotherMap = immutableMap.update('year', (v) => v - 2);
-
-console.log(anotherMap.toJS());
-
-//  deep dynamic set
-const yetAnotherMap = immutableMap.update('owner', (o) =>
-  o.update('address', (a) => a.update('city', (c) => 'Bengaluru'))
-);
-
-console.log(yetAnotherMap.toJS());
-
-//  self study:
-//  https://immutable-js.github.io/immutable-js/docs/#/Map
-//  delete, remove, deleteAll, removeAll
-//  clear
+console.log(originalState === nextState);

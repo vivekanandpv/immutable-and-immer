@@ -1,36 +1,34 @@
 import { produce } from 'immer';
 
-const originalState = {
-  isLoggedIn: true,
-  imageUrl: 'http://localhost:3000/image.png',
-  user: {
-    firstName: 'Nagesh',
-    lastName: 'A',
-    extraInfo: {
-      roles: ['user', 'manager'],
-      office: {
-        location: 'Gurugram',
-      },
-    },
-  },
+let state = {
+  firstName: 'Vivekanand',
+  city: 'Haveri',
 };
 
-const nextState = produce(originalState, (d) => {
-  d.user.extraInfo.roles.shift(); //  delete user
-  d.user.extraInfo.office.location = 'Chennai';
+function reducer(originalState, action) {
+  //  apply the modifications to the newState
+  switch (action.type) {
+    case 'UPDATE_NAME':
+      return produce(originalState, (d) => {
+        d.firstName = action.payload.newFirstName;
+      });
+
+    case 'UPDATE_CITY':
+      return produce(originalState, (d) => {
+        d.city = action.payload.newCity;
+      });
+
+    default:
+      return originalState;
+  }
+}
+
+//  dispatching the action
+let state2 = reducer(state, {
+  type: 'UPDATE_CITY',
+  payload: {
+    newCity: 'Mumbai',
+  },
 });
 
-//  original state is unchanged
-console.log(originalState.user.extraInfo.roles);
-console.log(originalState.user.extraInfo.office.location);
-
-console.log(nextState.user.extraInfo.roles);
-console.log(nextState.user.extraInfo.office.location);
-
-console.log(originalState === nextState);
-
-//  it is not a shallow copy!
-console.log(originalState.user === nextState.user);
-console.log(originalState.user.extraInfo === nextState.user.extraInfo);
-
-//  more info: https://immerjs.github.io/immer/
+console.log(state2);

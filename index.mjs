@@ -1,36 +1,74 @@
 import { produce } from 'immer';
 
-const originalState = {
-  isLoggedIn: true,
-  imageUrl: 'http://localhost:3000/image.png',
-  user: {
-    firstName: 'Nagesh',
-    lastName: 'A',
-    extraInfo: {
-      roles: ['user', 'manager'],
-      office: {
-        location: 'Gurugram',
-      },
-    },
+const store = {
+  _state: null,
+
+  _invocationList: [],
+
+  initialize: function (initialState, reducer) {
+    this._state = initialState;
+    this._reducer = reducer;
+  },
+
+  getState: function (section) {
+    return produce(this._state, (d) => {})[section];
+  },
+
+  _reducer: null,
+
+  dispatch: function (action) {
+    this._state = this._reducer(this._state, action);
+    this._notify();
+  },
+
+  register: function (subscriber) {
+    this._invocationList.push(subscriber);
+  },
+
+  _notify: function () {
+    this._invocationList.forEach((s) => s());
   },
 };
 
-const nextState = produce(originalState, (d) => {
-  d.user.extraInfo.roles.shift(); //  delete user
-  d.user.extraInfo.office.location = 'Chennai';
+//  initialize the store
+store.initialize(
+  {
+    user: { firstName: 'John', lastName: 'Doe' },
+    language: 'English',
+  },
+  function (state, action) {
+    if (action.type === 'changeFirstName') {
+      return produce(state, (d) => {
+        d.user.firstName = action.payload;
+      });
+    }
+
+    return state;
+  }
+);
+
+//  consumers of the state
+store.register(() => {
+  console.log('subscriber 1 is notified', store.getState('user'));
 });
 
-//  original state is unchanged
-console.log(originalState.user.extraInfo.roles);
-console.log(originalState.user.extraInfo.office.location);
+store.register(() => {
+  console.log('subscriber 2 is notified', store.getState('user'));
+});
 
-console.log(nextState.user.extraInfo.roles);
-console.log(nextState.user.extraInfo.office.location);
+store.register(() => {
+  console.log('subscriber 3 is notified', store.getState('language'));
+});
 
-console.log(originalState === nextState);
+const firstNameChangeActionCreator = (newFirstName) => {
+  return {
+    type: 'changeFirstName',
+    payload: newFirstName,
+  };
+};
 
-//  it is not a shallow copy!
-console.log(originalState.user === nextState.user);
-console.log(originalState.user.extraInfo === nextState.user.extraInfo);
+console.log('dispatching the action...Harish');
+store.dispatch(firstNameChangeActionCreator('Harish'));
 
-//  more info: https://immerjs.github.io/immer/
+console.log('dispatching the action...Murali');
+store.dispatch(firstNameChangeActionCreator('Murali'));

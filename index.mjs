@@ -2,8 +2,8 @@ import { produce } from 'immer';
 
 const store = {
   _state: null,
-
   _invocationList: [],
+  _reducer: null,
 
   initialize: function (initialState, reducer) {
     this._state = initialState;
@@ -13,8 +13,6 @@ const store = {
   getState: function (section) {
     return produce(this._state, (d) => {})[section];
   },
-
-  _reducer: null,
 
   dispatch: function (action) {
     this._state = this._reducer(this._state, action);
